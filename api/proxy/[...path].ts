@@ -1,7 +1,8 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import axios, { AxiosError } from 'axios';
 
-const QURAN_API_BASE = process.env.QURAN_API_BASE!;       // https://apis.quran.foundation
+const QURAN_API_BASE = process.env.QURAN_API_BASE!;         // https://apis.quran.foundation
+const QURAN_REFLECT_BASE = 'https://api.quran.foundation';  // separate subdomain for Reflect
 const CLIENT_ID = process.env.CLIENT_ID!;
 const OAUTH_BASE = process.env.OAUTH_BASE!;
 const CLIENT_SECRET = process.env.CLIENT_SECRET!;
@@ -46,10 +47,13 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     token = await getContentToken();
   }
 
+  // Reflect API lives on a different subdomain
+  const apiBase = upstreamPath.startsWith('/quran-reflect/') ? QURAN_REFLECT_BASE : QURAN_API_BASE;
+
   try {
     const upstream = await axios.request({
       method: req.method as any,
-      url: `${QURAN_API_BASE}${upstreamPath}`,
+      url: `${apiBase}${upstreamPath}`,
       params: queryParams,
       data: ['POST', 'PUT', 'PATCH'].includes(req.method ?? '') ? req.body : undefined,
       headers: {
