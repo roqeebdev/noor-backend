@@ -1,0 +1,7 @@
+{
+  "rewrites": [
+    { "source": "/api/auth/token", "destination": "/api/auth/token" },
+    { "source": "/api/auth/refresh", "destination": "/api/auth/refresh" },
+    { "source": "/api/proxy/:path*", "destination": "/api/proxy/:path*" }
+  ]
+}
