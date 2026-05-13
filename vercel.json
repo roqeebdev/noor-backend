@@ -1,7 +1,14 @@
 {
-  "rewrites": [
-    { "source": "/api/auth/token", "destination": "/api/auth/token" },
-    { "source": "/api/auth/refresh", "destination": "/api/auth/refresh" },
-    { "source": "/api/proxy/:path*", "destination": "/api/proxy/:path*" }
+  "version": 2,
+  "builds": [
+    {
+      "src": "api/**/*.ts",
+      "use": "@vercel/node"
+    }
+  ],
+  "routes": [
+    { "src": "/api/auth/token", "dest": "/api/auth/token.ts" },
+    { "src": "/api/auth/refresh", "dest": "/api/auth/refresh.ts" },
+    { "src": "/api/proxy/(.*)", "dest": "/api/proxy/[...path].ts" }
   ]
 }
